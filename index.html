@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DARYEEL BULSHO - Cabasho</title>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f3f7f5;
+      color: #17231d;
+      min-height: 100vh;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      background: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 800;
+      color: #087443;
+      letter-spacing: .5px;
+    }
+
+    .online {
+      font-size: 12px;
+      color: #087443;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: #16a34a;
+      border-radius: 50%;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #087443, #0b9b5b);
+      color: white;
+      padding: 48px 20px 70px;
+      text-align: center;
+    }
+
+    .hero small {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 2px;
+      opacity: .9;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: auto;
+      line-height: 1.7;
+      font-size: 15px;
+      opacity: .95;
+    }
+
+    /* MAIN CARD */
+    .container {
+      width: 92%;
+      max-width: 700px;
+      margin: -42px auto 50px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.10);
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 18px;
+      color: #087443;
+    }
+
+    .section-title:not(:first-child) {
+      margin-top: 28px;
+    }
+
+    /* INPUTS */
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #37443d;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d8e1dc;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      outline: none;
+      background: #fbfdfc;
+      transition: .2s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #087443;
+      box-shadow: 0 0 0 3px rgba(8,116,67,.10);
+      background: white;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* LOCATION */
+    .location-box {
+      display: flex;
+      gap: 8px;
+    }
+
+    .location-box input {
+      flex: 1;
+    }
+
+    .location-btn {
+      border: none;
+      background: #e8f6ef;
+      color: #087443;
+      padding: 0 15px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .location-btn:hover {
+      background: #d9f0e4;
+    }
+
+    /* FILE */
+    .file-box {
+      border: 2px dashed #cbd9d1;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      background: #fafcfb;
+    }
+
+    .file-box input {
+      border: none;
+      background: transparent;
+      padding: 5px;
+    }
+
+    .file-info {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #65736b;
+    }
+
+    /* BUTTON */
+    .submit-btn {
+      width: 100%;
+      border: none;
+      background: #087443;
+      color: white;
+      padding: 16px;
+      border-radius: 13px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: .2s;
+    }
+
+    .submit-btn:hover {
+      background: #075e37;
+    }
+
+    .submit-btn:disabled {
+      background: #91afa0;
+      cursor: not-allowed;
+    }
+
+    /* MESSAGE */
+    .message {
+      display: none;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      background: #e9f8ef;
+      color: #126333;
+      border: 1px solid #bde8cc;
+    }
+
+    .error {
+      background: #fff0f0;
+      color: #a32121;
+      border: 1px solid #f0c1c1;
+    }
+
+    /* PRIVACY */
+    .privacy {
+      text-align: center;
+      font-size: 12px;
+      color: #718078;
+      margin-top: 17px;
+      line-height: 1.6;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 25px 15px 35px;
+      color: #718078;
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: #087443;
+    }
+
+    /* MOBILE */
+    @media(max-width: 600px) {
+
+      .hero {
+        padding: 40px 18px 65px;
+      }
+
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .container {
+        width: 94%;
+      }
+
+      .card {
+        padding: 21px;
+        border-radius: 18px;
+      }
+
+      .location-box {
+        flex-direction: column;
+      }
+
+      .location-btn {
+        padding: 13px;
+      }
+
+      .topbar {
+        padding: 14px 15px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo">DARYEEL BULSHO</div>
+
+    <div class="online">
+      <span class="online-dot"></span>
+      ONLINE
+    </div>
+  </header>
+
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <small>BULSHADAADA • CODKAAGA • XALKAAGA</small>
+
+    <h1>Dir Cabasho</h1>
+
+    <p>
+      Haddii aad qabto cabasho ama arrin u baahan in wax laga qabto,
+      fadlan buuxi foomkan oo si toos ah noogu soo dir.
+    </p>
+
+  </section>
+
+
+  <!-- FORM -->
+  <main class="container">
+
+    <div class="card">
+
+      <!-- MESSAGE -->
+      <div id="successMessage" class="message success">
+        ✅ Cabashadaada si guul leh ayaa loo diray.
+        Mahadsanid.
+      </div>
+
+      <div id="errorMessage" class="message error">
+        ❌ Waxbaa khaldamay. Fadlan isku day mar kale.
+      </div>
+
+
+      <!-- PERSONAL INFORMATION -->
+      <div class="section-title">
+        Xogta Qofka
+      </div>
+
+      <div class="field">
+        <label>Magacaaga</label>
+
+        <input
+          type="text"
+          id="name"
+          placeholder="Geli magacaaga"
+          required
+        >
+      </div>
+
+
+      <div class="field">
+        <label>Number-kaaga</label>
+
+        <input
+          type="tel"
+          id="phone"
+          placeholder="Geli number-kaaga"
+          required
+        >
+      </div>
+
+
+      <!-- COMPLAINT -->
+      <div class="section-title">
+        Faahfaahinta Cabashada
+      </div>
+
+
+      <div class="field">
+
+        <label>Goobta</label>
+
+        <div class="location-box">
+
+          <input
+            type="text"
+            id="location"
+            placeholder="Geli goobta"
+            required
+          >
+
+          <button
+            type="button"
+            class="location-btn"
+            onclick="getLocation()"
+          >
+            📍 Goobtayda
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Wuxuu ka cabanayo</label>
+
+        <textarea
+          id="complaint"
+          placeholder="Halkan ku qor faahfaahinta cabashadaada..."
+          required
+        ></textarea>
+
+      </div>
+
+
+      <!-- FILE -->
+      <div class="field">
+
+        <label>File ama Sawir (Ikhtiyaari)</label>
+
+        <div class="file-box">
+
+          <input
+            type="file"
+            id="file"
+            accept="image/*,.pdf,.doc,.docx"
+          >
+
+          <div class="file-info">
+            Waxaad ku dari kartaa sawir ama dukumenti caddeyn ah.
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SUBMIT -->
+      <button
+        type="button"
+        class="submit-btn"
+        id="submitBtn"
+        onclick="sendComplaint()"
+      >
+        🚀 Dir Cabasho
+      </button>
+
+
+      <div class="privacy">
+        🔒 Xogta aad soo gudbiso waxaa loo isticmaalaa oo keliya
+        la socodka iyo maaraynta cabashadaada.
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 <strong>DARYEEL BULSHO</strong><br>
+    Bulshadaada • Codkaaga • Xalkaaga
+  </footer>
+
+
+
+<script>
+
+  /* =====================================
+     EMAILJS SETTINGS
+  ===================================== */
+
+  const SERVICE_ID = "service_d24cl59";
+
+  const TEMPLATE_ID = "template_81ut08o";
+
+  const PUBLIC_KEY = "d6P4AGAkWghM9AvAn";
+
+
+  /* =====================================
+     INITIALIZE EMAILJS
+  ===================================== */
+
+  emailjs.init({
+    publicKey: PUBLIC_KEY
+  });
+
+
+
+  /* =====================================
+     GET LOCATION
+  ===================================== */
+
+  function getLocation() {
+
+    const locationInput =
+      document.getElementById("location");
+
+    if (!navigator.geolocation) {
+
+      locationInput.value =
+        "Browser-kan ma taageerayo Location";
+
+      return;
+    }
+
+    locationInput.value =
+      "Goobta ayaa la raadinayaa...";
+
+    navigator.geolocation.getCurrentPosition(
+
+      function(position) {
+
+        const latitude =
+          position.coords.latitude;
+
+        const longitude =
+          position.coords.longitude;
+
+        locationInput.value =
+          latitude + ", " + longitude;
+
+      },
+
+      function(error) {
+
+        locationInput.value = "";
+
+        alert(
+          "Goobta lama heli karo. Fadlan Location-ka geli gacanta."
+        );
+
+      }
+
+    );
+
+  }
+
+
+
+  /* =====================================
+     SEND COMPLAINT
+  ===================================== */
+
+  async function sendComplaint() {
+
+    const name =
+      document.getElementById("name").value.trim();
+
+    const phone =
+      document.getElementById("phone").value.trim();
+
+    const location =
+      document.getElementById("location").value.trim();
+
+    const complaint =
+      document.getElementById("complaint").value.trim();
+
+    const file =
+      document.getElementById("file").files[0];
+
+    const button =
+      document.getElementById("submitBtn");
+
+    const success =
+      document.getElementById("successMessage");
+
+    const error =
+      document.getElementById("errorMessage");
+
+
+    /* Hide old messages */
+
+    success.style.display = "none";
+    error.style.display = "none";
+
+
+    /* Validation */
+
+    if (!name || !phone || !location || !complaint) {
+
+      error.innerHTML =
+        "❌ Fadlan dhammaan meelaha muhiimka ah buuxi.";
+
+      error.style.display = "block";
+
+      return;
+    }
+
+
+    /* Loading */
+
+    button.disabled = true;
+
+    button.innerHTML =
+      "⏳ Cabashada waa la dirayaa...";
+
+
+    try {
+
+      /* =====================================
+         DATA TO EMAILJS
+      ===================================== */
+
+      const templateParams = {
+
+        name: name,
+
+        phone: phone,
+
+        location: location,
+
+        complaint: complaint,
+
+        time: new Date().toLocaleString("so-SO"),
+
+        file_name:
+          file
+            ? file.name
+            : "File lama soo darin"
+
+      };
+
+
+      /* =====================================
+         SEND TO EMAILJS
+      ===================================== */
+
+      await emailjs.send(
+
+        SERVICE_ID,
+
+        TEMPLATE_ID,
+
+        templateParams
+
+      );
+
+
+      /* SUCCESS */
+
+      success.innerHTML =
+        "✅ <strong>Cabashadaada waa la diray!</strong><br>" +
+        "Mahadsanid. Cabashadaada si guul leh ayaa loo gudbiyay.";
+
+      success.style.display = "block";
+
+
+      /* Clear form */
+
+      document.getElementById("name").value = "";
+
+      document.getElementById("phone").value = "";
+
+      document.getElementById("location").value = "";
+
+      document.getElementById("complaint").value = "";
+
+      document.getElementById("file").value = "";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+
+    } catch (err) {
+
+      console.error(err);
+
+      error.innerHTML =
+        "❌ <strong>Cabashada lama dirin.</strong><br>" +
+        "Fadlan hubi EmailJS Service ID, Template ID iyo Template-kaaga.";
+
+      error.style.display = "block";
+
+    }
+
+
+    /* Button back */
+
+    button.disabled = false;
+
+    button.innerHTML =
+      "🚀 Dir Cabasho";
+
+  }
+
+</script>
+
+</body>
+</html>
